@@ -1,0 +1,3 @@
+[02-Nov-2013 11:13:04 America/New_York] PHP Notice:  Use of undefined constant ROOT_DIR - assumed 'ROOT_DIR' in /home/mds/public_html/lang/AvailableLanguages.php on line 21
+[02-Nov-2013 11:13:04 America/New_York] PHP Warning:  require_once(ROOT_DIRlang/AvailableLanguage.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/mds/public_html/lang/AvailableLanguages.php on line 21
+[02-Nov-2013 11:13:04 America/New_York] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'ROOT_DIRlang/AvailableLanguage.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/mds/public_html/lang/AvailableLanguages.php on line 21
