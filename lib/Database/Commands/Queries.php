@@ -81,6 +81,10 @@ class Queries
 	const INSERT_APPOINTMENT_ARCHIVE_IN_OSCAR = "INSERT INTO oscar_12_1.appointmentArchive(appointment_no, provider_no, appointment_date, start_time, end_time, name,
 												demographic_no, program_id, notes, reason, location, resources, type, style, billing, status, imported_status, createdatetime, updatedatetime, creator, lastupdateuser, remarks, urgency, creatorSecurityId, bookingSource)
 												SELECT * FROM oscar_12_1.appointment WHERE appointment_no = @appointmentId"; 
+
+	const INSERT_APPOINTMENT_ARCHIVE_IN_OSCAR_BY_NOTES = "INSERT INTO oscar_12_1.appointmentArchive(appointment_no, provider_no, appointment_date, start_time, end_time, name,
+												demographic_no, program_id, notes, reason, location, resources, type, style, billing, status, imported_status, createdatetime, updatedatetime, creator, lastupdateuser, remarks, urgency, creatorSecurityId, bookingSource)
+												SELECT * FROM oscar_12_1.appointment WHERE notes LIKE @notes"; 
 	
 	const UPDATE_APPOINTMENT_IN_OSCAR = "UPDATE oscar_12_1.appointment
 										 SET provider_no = @resourceId, appointment_date = DATE(@date), start_time = @startTime, end_time = @endTime,
@@ -88,6 +92,8 @@ class Queries
 										 WHERE appointment_no = @appointmentId"; 
 
 	const DELETE_APPOINTMENT_IN_OSCAR = "DELETE FROM oscar_12_1.appointment WHERE appointment_no = @appointmentId";
+	
+	const DELETE_APPOINTMENT_IN_OSCAR_BY_NOTES = "DELETE FROM oscar_12_1.appointment WHERE notes LIKE @notes";
 	
 	const GET_APPOINTMENT_BY_RN = "SELECT * FROM oscar_12_1.appointment WHERE notes like @notes";
 	

@@ -317,7 +317,7 @@ abstract class BaseIntegrator implements IIntegrator
 				
 		$reply = json_decode($reply);
 		
-		if ($reply->reservations)
+		if (property_exists($reply, 'reservations'))
 		{
 			$this->mdsAppointments = $reply->reservations;
 		}			
@@ -666,7 +666,7 @@ abstract class BaseIntegrator implements IIntegrator
                 
             }elseif($appointment->status == 2)
             {
-                $this->deleteNonMDSAppointment($appointment->reservationId);
+                $this->deleteNonMDSAppointment($appointment->reservationId, $appointment->referenceNumber);
             }
 		}                
 	}	

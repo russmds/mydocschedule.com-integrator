@@ -172,11 +172,11 @@ class OscarIntegrator extends BaseIntegrator
         return ServiceLocator::GetDatabase()->Query(new GetDeletedAppointmentsCommand($lastId, $providers));
     }        
     
-    protected function deleteNonMDSAppointment($appointmentId)
+    protected function deleteNonMDSAppointment($appointmentId, $refNumber)
     {        
-        ServiceLocator::GetDatabase()->Execute(new InsertAppointmentArchiveInOscarCommand($appointmentId));
+        ServiceLocator::GetDatabase()->Execute(new InsertAppointmentArchiveInOscarCommand($appointmentId, $refNumber));
         
-        ServiceLocator::GetDatabase()->Execute(new DeleteAppointmentInOscarCommand($appointmentId));
+        ServiceLocator::GetDatabase()->Execute(new DeleteAppointmentInOscarCommand($appointmentId, $refNumber));
     }
     
     protected function updateNonMDSAppointment($appointment)
@@ -270,7 +270,7 @@ class OscarIntegrator extends BaseIntegrator
             $returnArray = array('patientId' => $patientId, 'appointmentId' => $appointmentId);
         }else
         {
-            ServiceLocator::GetDatabase()->Execute(new InsertAppointmentArchiveInOscarCommand($appointmentId));
+            ServiceLocator::GetDatabase()->Execute(new InsertAppointmentArchiveInOscarCommand($appointmentId, $rn));
             
             ServiceLocator::GetDatabase()->ExecuteInsert(new UpdateAppointmentInOscarCommand($resourceId, $startTime, $endTime, $name, $status, $patientId, $providerId, $appointment->startDate, $appointmentId));
         }
@@ -331,7 +331,9 @@ class OscarIntegrator extends BaseIntegrator
     }
     
     public function Compare($OscarApt, $MDSApt)
-    {                    
+    {
+        $diff;
+        
         if ($MDSApt->reservationId > 0 && $OscarApt->appointment_no != $MDSApt->reservationId)
         {
             $diff = "Appointment ID: MyDocSchedule.com: $MDSApt->reservationId    Local Schedule: $OscarApt->appointment_no;";

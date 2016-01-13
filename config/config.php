@@ -31,11 +31,11 @@ $conf['settings']['integration.with'] = 'oscar';
 /**
  * Database configuration
  */
-$conf['settings']['nonmds.db']['type'] = 'mysql';
-$conf['settings']['nonmds.db']['user'] = 'mds';             // database user with permission to the phpScheduleIt database
-$conf['settings']['nonmds.db']['password'] = 'mds123';
-$conf['settings']['nonmds.db']['hostspec'] = 'localhost';   // ip, dns or named pipe
-$conf['settings']['nonmds.db']['name'] = 'oscar_12_1';
+$conf['settings']['local.db']['type'] = 'mysql';
+$conf['settings']['local.db']['user'] = 'mds';             // database user with permission to the phpScheduleIt database
+$conf['settings']['local.db']['password'] = 'mds123';
+$conf['settings']['local.db']['hostspec'] = 'localhost';   // ip, dns or named pipe
+$conf['settings']['local.db']['name'] = 'oscar_12_1';
 
 /**
  * MDS configuration
@@ -93,6 +93,6 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
 /**
  * Live Data; this is used to save the latest run-time values for the next run
  */
-$conf['settings']['dynamic.data']['last.deleted.id'] = '444';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-11 19:22:58';
+$conf['settings']['dynamic.data']['last.deleted.id'] = '453';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-13 11:06:27';
 

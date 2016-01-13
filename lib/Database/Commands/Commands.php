@@ -172,19 +172,35 @@ class UpdateAppointmentInOscarCommand extends SqlCommand
 
 class InsertAppointmentArchiveInOscarCommand extends SqlCommand
 {
-	public function __construct($appointmentId)
+	public function __construct($appointmentId, $refNumber)
 	{
-		parent::__construct(Queries::INSERT_APPOINTMENT_ARCHIVE_IN_OSCAR);
-		$this->AddParameter(new Parameter(ParameterNames::APPOINTMENT_ID, $appointmentId));
+		if ($appointmentId > 0)
+		{
+			parent::__construct(Queries::INSERT_APPOINTMENT_ARCHIVE_IN_OSCAR);
+		
+			$this->AddParameter(new Parameter(ParameterNames::APPOINTMENT_ID, $appointmentId));
+		}else
+		{
+			parent::__construct(Queries::INSERT_APPOINTMENT_ARCHIVE_IN_OSCAR_BY_NOTES);
+		
+			$this->AddParameter(new Parameter(ParameterNames::NOTES, "MDS:$refNumber%"));			
+		}
 	}	
 }
 
 class DeleteAppointmentInOscarCommand extends SqlCommand
 {
-	public function __construct($appointmentId)
+	public function __construct($appointmentId, $refNumber)
 	{
-		parent::__construct(Queries::DELETE_APPOINTMENT_IN_OSCAR);
-		$this->AddParameter(new Parameter(ParameterNames::APPOINTMENT_ID, $appointmentId));
+		if ($appointmentId > 0)
+		{
+			parent::__construct(Queries::DELETE_APPOINTMENT_IN_OSCAR);
+			$this->AddParameter(new Parameter(ParameterNames::APPOINTMENT_ID, $appointmentId));
+		}else
+		{
+			parent::__construct(Queries::DELETE_APPOINTMENT_IN_OSCAR_BY_NOTES);
+			$this->AddParameter(new Parameter(ParameterNames::NOTES, "MDS:$refNumber%"));			
+		}	
 	}	
 }
 

@@ -119,7 +119,7 @@ class ConfigKeys
 
 class ConfigSection
 {
-    const DATABASE = 'nonmds.db';
+    const DATABASE = 'local.db';
 	const MDS = 'mds';
 	const MAILER = 'phpmailer';
 	const DYNAMIC_DATA = 'dynamic.data';
