@@ -38,13 +38,13 @@ interface IIntegrator
 	 * @abstract
 	 * @return true/false
 	 */        
-    public function LoginToNonMDS();
+    public function LoginToLocal();
 
 	/**
 	 * @abstract
 	 * @return true/false
 	 */       
-    public function GetNonMDSAppointments();
+    public function GetLocalAppointments();
 
 	/**
 	 * @abstract
@@ -64,7 +64,7 @@ interface IIntegrator
 	 * @param $appointment array()
 	 * @return true/false
 	 */            
-    public function FormatNonMDSAppointment($appointment);
+    public function FormatLocalAppointment($appointment);
 
 	/**
 	 * @abstract
@@ -83,7 +83,7 @@ interface IIntegrator
 	 * @abstract
 	 * @return true/false
 	 */                
-    public function SyncUpNonMDS();
+    public function SyncUpLocal();
 	
 	//public function SendErrorEmail($message, $errors = array());
 }
@@ -128,14 +128,14 @@ abstract class BaseIntegrator implements IIntegrator
             return;
         }
 
-        if (!$this->LoginToNonMDS())
+        if (!$this->LoginToLocal())
         {
             return;
         }
         $this->myLname = $this->config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_USER);
         
         // get the Oscar provider id of our program
-        $result = $this->GetIntegratorAsUserInNonMDS();
+        $result = $this->GetIntegratorAsUserInLocal();
         
         if ($row = $result->GetRow())
         {
@@ -153,7 +153,7 @@ abstract class BaseIntegrator implements IIntegrator
         
         $providerIds = explode(',', $providerString);
 
-        // Get all Oscar/NonMDS providers
+        // Get all Oscar/Local providers
         $result = $this->GetAllProviders();
         
         // select the providers that use MyDocSchedule.com
@@ -317,7 +317,7 @@ abstract class BaseIntegrator implements IIntegrator
 				
 		$reply = json_decode($reply);
 		
-		if (property_exists($reply, 'reservations'))
+		if (!is_null($reply) && property_exists($reply, 'reservations'))
 		{
 			$this->mdsAppointments = $reply->reservations;
 		}			
@@ -399,7 +399,13 @@ abstract class BaseIntegrator implements IIntegrator
     {
         return $this->myId;
     }
-    	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return true|false
+	 * this function checks whether it's time for reconciliation report to run
+	 */          		           		    	
 	protected function IsItRuntime()
 	{
 		$runTime = ($this->config->GetSectionKey(ConfigSection::MDS, ConfigKeys::RECONCILIATION_TIME)) ? $this->config->GetSectionKey(ConfigSection::MDS, ConfigKeys::RECONCILIATION_TIME) : '07:00';
@@ -416,7 +422,13 @@ abstract class BaseIntegrator implements IIntegrator
 		}		
 		return false;
 	}
-	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return
+	 * This is the reconciliation report which is run daily based on the configuration time setup
+	 */          		           			
     public function Reconcile()
     {
         if (!$this->IsItRuntime())
@@ -424,7 +436,7 @@ abstract class BaseIntegrator implements IIntegrator
 		
 		$this->GetMDSAppointments('yes');
 
-        $this->GetAllNonMDSAppointments();
+        $this->GetAllLocalAppointments();
         
 		$appointments = array();
 		
@@ -460,7 +472,13 @@ abstract class BaseIntegrator implements IIntegrator
         }		
 		$this->SendReport($localOnly, $appointments, $difference);
     }
-	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return none
+	 * Email the reconciliation report
+	 */          		           			
 	protected function SendReport($localOnly = null, $inMds = null, $diff = null)
 	{
 		$emails = array();
@@ -490,14 +508,14 @@ abstract class BaseIntegrator implements IIntegrator
 	
     public function SyncUpMDS()
     {        
-        $this->ProcessNonMDSNewAndUpdated();
+        $this->ProcessLocalNewAndUpdated();
         
-        $this->ProcessNonMDSDeleted();
+        $this->ProcessLocalDeleted();
     }
 	
-    private function ProcessNonMDSNewAndUpdated()
+    private function ProcessLocalNewAndUpdated()
     {
-        $records = $this->GetNonMDSAppointments();
+        $records = $this->GetLocalAppointments();
         
         if ($records->NumRows() == 0)
         {
@@ -508,7 +526,7 @@ abstract class BaseIntegrator implements IIntegrator
         
         while ($appointment = $records->GetRow())
         {
-            list($refNumber, $request) = $this->FormatNonMDSAppointment($appointment);
+            list($refNumber, $request) = $this->FormatLocalAppointment($appointment);
             
             $reply = $this->SendToMDS($request, $refNumber);
             
@@ -521,9 +539,14 @@ abstract class BaseIntegrator implements IIntegrator
         $this->config->SaveSectionKey(ConfigSection::DYNAMIC_DATA,ConfigKeys::LAST_UPDATED_TIMESTAMP);
     }
 
-    private function ProcessNonMDSDeleted()
+	/**
+	 * @private
+	 * @param none
+	 * @return none
+	 */          		           		
+    private function ProcessLocalDeleted()
     {                
-        $records = $this->GetNonMDSDeletedAppointments();
+        $records = $this->GetLocalDeletedAppointments();
         
         if ($records->NumRows() == 0)
         {
@@ -538,7 +561,7 @@ abstract class BaseIntegrator implements IIntegrator
             
             $no = $appointment['appointment_no'];
             
-            $request = '{"appointment_no":"' . $no . '"}';
+            $request = '{"reservationId":"' . $no . '"}';
             
             $this->handleMDSReply($request, $reply);
             
@@ -548,7 +571,13 @@ abstract class BaseIntegrator implements IIntegrator
         
         $this->config->SaveSectionKey(ConfigSection::DYNAMIC_DATA,ConfigKeys::LAST_DELETED_ID);
     }
-	
+
+	/**
+	 * @public
+	 * @param json $request, string $refNum
+	 * @return string(html) $reply
+	 * Send an appoinment to MyDocSchedule.com
+	 */          		           			
     public function SendToMDS($request, $refNum = null)
     {
         global $options;
@@ -583,6 +612,11 @@ abstract class BaseIntegrator implements IIntegrator
         return $reply;
     }
 
+	/**
+	 * @public
+	 * @param string $refNum
+	 * @return string $reply
+	 */          		           			
     public function DeleteInMDS($refNum)
     {
         global $options;
@@ -609,7 +643,12 @@ abstract class BaseIntegrator implements IIntegrator
         // see what we got
         return $reply;
     }
-	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return integrator Id
+	 */          		           			
     protected function handleMDSReply($request, $reply)
     {
         $reply = json_decode($reply);
@@ -618,19 +657,19 @@ abstract class BaseIntegrator implements IIntegrator
         
         if ($reply->message == 'The reservation was created')
         {
-            Log::Debug("Oscar appointment # " . $request->appointment_no . " was CREATED in MDS with ref ID " . $reply->referenceNumber);
+            Log::Debug("Oscar appointment # " . $request->reservationId . " was CREATED in MDS with ref ID " . $reply->referenceNumber);
             
             ServiceLocator::GetDatabase()->Execute(new UpdateOscarAppointmentsCommand($reply->referenceNumber, $request->appointment_no));
         }
 
         if ($reply->message == 'The reservation was updated')
         {
-            Log::Debug("Oscar appointment # " . $request->appointment_no . " was UPDATED in MDS with ref ID " . $reply->referenceNumber);
+            Log::Debug("Oscar appointment # " . $request->reservationId . " was UPDATED in MDS with ref ID " . $reply->referenceNumber);
         }
 
         if ($reply->message == 'The item was deleted')
         {
-            Log::Debug("Oscar appointment # " . $request->appointment_no . " was DELETED in MDS.");
+            Log::Debug("Oscar appointment # " . $request->reservationId . " was DELETED in MDS.");
         }
         
         if (preg_match('/error/', $reply->message))
@@ -645,8 +684,13 @@ abstract class BaseIntegrator implements IIntegrator
             $this->SendErrorEmail($message,  $reply->errors);
         }
     }
-	
-    public function SyncUpNonMDS()
+	/**
+	 * @public
+	 * @param none
+	 * @return none
+	 * The controlling function for synchronizing local db with MyDocSchedule.com
+	 */          		           			
+    public function SyncUpLocal()
 	{				
 		$this->GetMDSAppointments();
 		
@@ -662,11 +706,11 @@ abstract class BaseIntegrator implements IIntegrator
 		{
             if ($appointment->status == 1 || $appointment->status == 3)
             {
-                $newAppointments[] = $this->updateNonMDSAppointment($appointment);
+                $newAppointments[] = $this->updateLocalAppointment($appointment);
                 
             }elseif($appointment->status == 2)
             {
-                $this->deleteNonMDSAppointment($appointment->reservationId, $appointment->referenceNumber);
+                $this->deleteLocalAppointment($appointment->reservationId, $appointment->referenceNumber);
             }
 		}                
 	}	

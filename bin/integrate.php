@@ -67,7 +67,7 @@ $integrator->SyncUpMDS();
 /*********************************************************************************************
  *   Second, synchronize Local schedule with MDS, e.g. get appointments from MDS to Local
 *********************************************************************************************/
-$integrator->SyncUpNonMDS();
+$integrator->SyncUpLocal();
 
 /*********************************************************************************************
  *   Check if reconciliation needs to be run and if so run it

@@ -26,13 +26,24 @@ require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
 require_once(ROOT_DIR . 'lib/Integration/BaseIntegrator.php');
 
 class OscarIntegrator extends BaseIntegrator
-{    
+{
+    private $appointmentRequestMap = array('first_name' => 'fname',
+                                             'last_name' => 'lname',
+                                             'appointment_date, ,start_time' => 'startDateTime',
+                                             'appointment_date, ,end_time' => 'endDateTime',
+                                             'address' => 'city',
+                                             'postal' => 'zip',
+                                             'province' => 'state',
+                                             'demographic_no' => 'patientId',
+                                             'appointment_no' => 'reservationId',
+                                             'provider_no' => 'resourceId');
+    
     public function __construct()
     {
         parent::__construct();
     }
 
-    protected function GetIntegratorAsUserInNonMDS()
+    protected function GetIntegratorAsUserInLocal()
     {
         return ServiceLocator::GetDatabase()->Query(new GetProviderCommand($this->myLname));
     }
@@ -42,7 +53,7 @@ class OscarIntegrator extends BaseIntegrator
         return ServiceLocator::GetDatabase()->Query(new GetDoctorProvidersCommand());
     }
     
-    public function LoginToNonMDS()
+    public function LoginToLocal()
     {
         try
         {        
@@ -63,7 +74,7 @@ class OscarIntegrator extends BaseIntegrator
         
     public function FormatMDSAppointment($appointment){}
     
-    public function FormatNonMDSAppointment($appointment)
+    public function FormatLocalAppointment($appointment)
     {
         Log::Debug('Formatting Oscar appointment %s for MDS', $appointment['appointment_no']);
          
@@ -78,7 +89,7 @@ class OscarIntegrator extends BaseIntegrator
             $selectedFields = $appointment;
         }else
         {
-            $selectedFields['name'] = 'Do_Not_Book,Do_Not_Book';
+            //$selectedFields['name'] = 'Do_Not_Book,Do_Not_Book';
             $selectedFields['first_name'] = 'Do_Not_Book';
             $selectedFields['last_name'] = 'Do_Not_Book';
             $selectedFields['appointment_no'] = $appointment['appointment_no'];
@@ -121,8 +132,9 @@ class OscarIntegrator extends BaseIntegrator
                 }
             }                
         }
+        $mappedFields = $this->mapToMDS($selectedFields);
         
-        $request = array_map('utf8_encode', $selectedFields );
+        $request = array_map('utf8_encode', $mappedFields );
         
         $request['sourceType'] = 'oscar';
         
@@ -140,7 +152,7 @@ class OscarIntegrator extends BaseIntegrator
         return $refNum;
     }
            
-    public function GetNonMDSAppointments()
+    public function GetLocalAppointments()
     {
         $lastTs = $this->config->GetSectionKey(ConfigSection::DYNAMIC_DATA,ConfigKeys::LAST_UPDATED_TIMESTAMP);
         
@@ -149,7 +161,7 @@ class OscarIntegrator extends BaseIntegrator
         return ServiceLocator::GetDatabase()->Query(new GetOscarAppointmentsCommand($lastTs, $this->myId, $providers));        
     }
 
-    public function GetAllNonMDSAppointments()
+    public function GetAllLocalAppointments()
     {
         $providers = '(' . (implode(',', $this->providers)) . ')';
         
@@ -157,13 +169,13 @@ class OscarIntegrator extends BaseIntegrator
         
         while ($row = $result->GetRow())
         {
-            list($refNumber, $request) = $this->FormatNonMDSAppointment($row);
+            list($refNumber, $request) = $this->FormatLocalAppointment($row);
             
             $this->nonmdsAppointments[] = $request;
         }
     }
 
-    public function GetNonMDSDeletedAppointments()
+    public function GetLocalDeletedAppointments()
     {
         $lastId = $this->config->GetSectionKey(ConfigSection::DYNAMIC_DATA,ConfigKeys::LAST_DELETED_ID);
         
@@ -172,14 +184,14 @@ class OscarIntegrator extends BaseIntegrator
         return ServiceLocator::GetDatabase()->Query(new GetDeletedAppointmentsCommand($lastId, $providers));
     }        
     
-    protected function deleteNonMDSAppointment($appointmentId, $refNumber)
+    protected function deleteLocalAppointment($appointmentId, $refNumber)
     {        
         ServiceLocator::GetDatabase()->Execute(new InsertAppointmentArchiveInOscarCommand($appointmentId, $refNumber));
         
         ServiceLocator::GetDatabase()->Execute(new DeleteAppointmentInOscarCommand($appointmentId, $refNumber));
     }
     
-    protected function updateNonMDSAppointment($appointment)
+    protected function updateLocalAppointment($appointment)
     {
         $resourceId = $appointment->resourceId;                
         
@@ -365,15 +377,53 @@ class OscarIntegrator extends BaseIntegrator
             $diff .= 'Appointment Date: ' . 'MydocSchedule.com: ' .  $mdsStart->Format('Y-m-d H:i:s') . '-' . $mdsEnd->Format('Y-m-d H:i:s') . '    Local Schedule: ' . $oscarStart->Format('Y-m-d H:i:s') . '-' . $oscarEnd->Format('Y-m-d H:i:s');
         }
         
-        if ($diff  && !preg_match('/Appointment/', $diff))
+        if (isset($diff) && !preg_match('/Appointment/', $diff))
             $diff = "Appointment ID: MydocSchedule.com: $MDSApt->referenceNumber    Local Schedule: $OscarApt->appointment_no;" . $diff;
         
-        return (!$diff) ? null : $diff;
+        return (!isset($diff)) ? null : $diff;
     }
     
     protected function GetLocalAppointmentAsString($appointment)
     {
         return "Name: $appointment->name    Date: $appointment->appointment_date $appointment->start_time";
+    }
+    
+    protected function mapToMDS($fields)
+    {        
+        $mappedFields = $fields;
+ 
+        foreach (array_keys($this->appointmentRequestMap) as $field)
+        {
+            if(array_key_exists($field, $fields))
+            {
+                $mappedFields[$this->appointmentRequestMap[$field]] = $fields[$field];
+                
+                //unset($mappedFields[$field]);
+            }else
+            {
+                $many = explode(',', $field);
+                
+                if (count($many) > 1)
+                {
+                    $value = '';
+                    
+                    foreach ($many as $one)
+                    {
+                        if(array_key_exists($one, $fields))
+                        {
+                            $value .= $fields[$one];
+                            
+                            //unset($mappedFields[$one]);
+                        }else
+                        {
+                            $value .= $one;
+                        }
+                    }
+                    $mappedFields[$this->appointmentRequestMap[$field]] = $value;
+                } 
+            }
+        }    
+        return $mappedFields;
     }
 }
 
