@@ -24,7 +24,7 @@ along with phpScheduleIt.  If not, see <http://www.gnu.org/licenses/>.
 		<meta http-equiv="Content-Type" content="text/html; charset={$Charset}" />
 	</head>
 	<body style="background-color: #FEFEFE;color: #333333;font-size:12px;font-family:Helvetica;margin: 0;">		
-		<div style="background: https://www.mydocschedule.com/img/header-top.png repeat scroll 0 0 transparent;border-bottom: 1px solid #436981; height: 70px;"></div>
+		<div style="background: url(https://www.mydocschedule.com/img/header-top.png) repeat scroll 0 0 transparent;border-bottom: 1px solid #436981; height: 70px;"></div>
 		<div style="color: #FFFFFF;display: inline;float: left;padding-left: 40px;border-right: solid 2px #436981">
 			<a href="https://www.mydocschedule.com/index"><img alt="mydocschedule.com logo" style="padding:25px;" src="https://www.mydocschedule.com/img/mydocschedule.png" /></a>
 		</div>

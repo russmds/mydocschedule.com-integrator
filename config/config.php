@@ -9,11 +9,6 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This software is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with phpScheduleIt.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -79,7 +74,7 @@ $conf['settings']['data.transfer']['map.mds.patient.to.oscar.by.field.list'] = '
 // Valid values are 'all' meaning all doctors setup in the Oscar provider table
 // or a list of last names of doctorsas set up in Oscar or a list of provider ids in Oscar
 // (for cases where there are 2 or more doctors with identical last names and one or more use MDS and one or more don't)
-$conf['settings']['data.transfer']['provider.list'] = 'all';
+$conf['settings']['data.transfer']['provider.list'] = 'Paleta';
 
 
 /**
@@ -98,6 +93,6 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
 /**
  * Live Data; this is used to save the latest run-time values for the next run
  */
-$conf['settings']['dynamic.data']['last.deleted.id'] = '620';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-19 16:26:30';
+$conf['settings']['dynamic.data']['last.deleted.id'] = '629';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-23 10:50:01';
 

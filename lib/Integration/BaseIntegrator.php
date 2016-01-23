@@ -4,18 +4,10 @@ Copyright 2011-2016 Russ Profant
 
 This file is part of MyDocSchedule.com integration package.
 
-phpScheduleIt is free software: you can redistribute it and/or modify
+This is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
-phpScheduleIt is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with phpScheduleIt.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
@@ -315,12 +307,18 @@ abstract class BaseIntegrator implements IIntegrator
         // close cURL resource, and free up system resources
         curl_close($ch);
 				
-		$reply = json_decode($reply);
+		$replyObj = json_decode($reply);
 		
-		if (!is_null($reply) && property_exists($reply, 'reservations'))
+		if (!is_null($replyObj) && property_exists($replyObj, 'reservations'))
 		{
-			$this->mdsAppointments = $reply->reservations;
-		}			
+			$this->mdsAppointments = $replyObj->reservations;
+		}else
+		{
+			if (is_null($replyObj))
+			{
+				Log::Debug("Web service error occured when retrieving appointments from MDS: %s", $reply);
+			}
+		}
 		return;
 	}
 
@@ -505,14 +503,26 @@ abstract class BaseIntegrator implements IIntegrator
 			fclose($myfile);
 		}			
 	}
-	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return none
+	 * The main controlling function for synchronizing MyDocSchedule.com
+	 */          		           				
     public function SyncUpMDS()
     {        
         $this->ProcessLocalNewAndUpdated();
         
         $this->ProcessLocalDeleted();
     }
-	
+
+	/**
+	 * @public
+	 * @param none
+	 * @return none
+	 * Email the reconciliation report
+	 */          		           				
     private function ProcessLocalNewAndUpdated()
     {
         $records = $this->GetLocalAppointments();
@@ -645,9 +655,9 @@ abstract class BaseIntegrator implements IIntegrator
     }
 
 	/**
-	 * @public
-	 * @param none
-	 * @return integrator Id
+	 * @protected
+	 * @param json $request, json $reply
+	 * @return integrator none
 	 */          		           			
     protected function handleMDSReply($request, $reply)
     {
