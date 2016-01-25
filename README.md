@@ -16,8 +16,10 @@ for Linux and "win" is for Windows. The package is written in PHP and therefore 
 For Linux istallation make sure PHP and 2 of its libraries are installed. You need at least PHP 5.5 or higher plus mysqli and curl are the required libraries.
 PHP is usually installed on Linux distributions, to check the version of PHP run this:
 
-    php -v
-    
+~~~
+php -v
+~~~
+
 Check the output make sure it's at least 5.5 or higher.
 
 ~~~
