@@ -4,7 +4,7 @@
 
 This software integrates a local scheduling software with the schedule on MyDocSchedule.com. "Local" means either the same machine where this package will be installed or
 a different machine on the same network. It "integrates" the two software domains by synchronizing the scheduling data between these two in near real time, the exact
-delay depends on how often the integrator runs usually either every 1 or 2 minutes. 
+delay depends on how often the integrator runs, this is usually every 1 or 2 minutes. 
 
 ## Installation
 
@@ -48,7 +48,7 @@ The integrator package needs to be setup before it can be used. The setup depend
 
 ### Oscar
 
-* Create Oscar login
+#### Create Oscar login
 
 You need to create the integrator login in Oscar and MyDocSchedule.com. First, create a provider in Oscar by clicking 'Admin->Provider->Add A Provider Record'. The name can be something like
 'Mds Integrator' or anything else you want but it should be indicative that this is the name used by the MDS integration software. After provider is created, you
@@ -66,7 +66,7 @@ To get around this problem you need to update the user in MySQL directly like th
 mysql -u user -ppassword -e "UPDATE user SET host = '%' WHERE user = 'login_name'" mysql
 ~~~
 
-* Create MyDocSchedule.com Login
+#### Create MyDocSchedule.com Login
    
 Assuming you registered your practice with MyDocSchedule.com you need to log in and go to 'Administration->Users & Patients' to setup the integrator login. You need only need to enter the name,
 password, email and login type. Anything will work. **The email doesn't need to be real**. It's needed because email is used as a login name in MyDocSchedule.com. However
@@ -75,13 +75,60 @@ you can use 'oscar-integrator@yourmedicalpractice.com'.
 
 Once done enter this login in the *installation_directory/config/config.php* file under the *$conf['settings']['mds']['user']* and *$conf['settings']['mds']['password']* keys.
  
-Make sure the providers from Oscar that wants their schedule published on MyDocSchedule.com are created in MyDocSchedule.com and their schedule reflects their Oscar schedule.
+#### Setup Providers in MyDocSchedule.com
 
-* Update Configuration File
+Make sure the providers from Oscar that want their schedule published on MyDocSchedule.com are created in MyDocSchedule.com and their schedule reflects their Oscar schedule.
 
-* Test The Setup
+In addition you have to map each provider from Oscar to his/her schedule in MyDocSchedule.com. To do that in MyDocSchedule.com click on 'Administration->Providers' and under 'Provider
+Details' edit 'External ID' field. You get the Oscar ID in Oscar by clicking 'Administration->Provider->Search/Edit/Delete Provider Record' then search for the
+provider by name.  When the provider is found the 'ID' is the value you need. Enter this value in MyDocSchedule.com.
 
-* Schedule The Integration Runs
+That's all that is required on MyDocSchedule.com side.
+
+#### Update Configuration File
+
+Now we need to complete the update of the integrator configuration file. You should have already entered the logins. 
+
+Here are the first few setting keys:
+
+~~~
+$conf['settings']['timezone'] = 'America/Toronto';
+$conf['settings']['enable.email'] = 'true';       
+$conf['settings']['default.language'] = 'en_us';  
+$conf['settings']['admin.email'] = '';
+$conf['settings']['integration.with'] = 'oscar';
+~~~
+
+The full list of timezones is available [here](http://php.net/manual/en/timezones.php). It's important to note that many timezones share the same time so it doesn't matter
+whether you enter 'America/Toronto' or 'America/New_York' as these 2 are equivalent.
+
+The 'enable.email' setting is important. The integrator reports errors and reconcilation runs through email. Therefore email should be setup on the machine where the integrator runs
+so that emails can be sent. However many of the host machines will not have the email server setup and it's not worth going through the trouble of setting up full mail server.
+
+For Linux machines the solution is easy. Instead of setting up a full mail server you only need to setup an outgoing email forwarding software that will forward the email
+to mail server/hub such as Google's Gmail. **sSmtp** is just such a tool. Google the setup, it's quick and simple. If you don't have a Gmail account you need to open one.
+You can combine the need for an email account on Gmail with the need for an email address (as the login name) for the integrator into MyDocSchedule.com and use the created Gmail
+account as the Integrator login name for MyDocSchedule.com. This is just a sugestion not a requirement.
+
+If you decide not to install/use mail then set the setting to false. If you have the email setup then to specify who gets the error and reconciliation emails fill in the
+*$conf['settings']['mds']['email.list']* setting with as many emails as you want using comma to separate them. 
+
+The rest of the settings can be left as they are.
+
+#### Test The Setup
+
+To test the setup navigate to the bin directory of the installation directory and run the integrator with '-t' or '--test' options.
+
+~~~
+cd /home/user/mdsIntegrator/bin
+php integrator.php -t
+~~~
+
+The test run only checks logins to local database and MyDocSchedule.com. If both succeed the test is a success otherwise the test fails. You need to check the
+log to see why login failed and why.
+
+
+#### Schedule The Integration Runs
 
 ## License
 

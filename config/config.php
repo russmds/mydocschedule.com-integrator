@@ -20,11 +20,12 @@ $conf['settings']['timezone'] = 'America/Toronto';                // look up her
 $conf['settings']['enable.email'] = 'true';                       // global configuration to enable if any emails will be sent
 $conf['settings']['default.language'] = 'en_us';                  // find your language in phpScheduleIt/lang directory
 $conf['settings']['admin.email'] = '';
-$conf['settings']['lang.code'] = 'en_us';
 $conf['settings']['integration.with'] = 'oscar';
+#$conf['settings']['lang.code'] = 'en_us';
+
 
 /**
- * Database configuration
+ * Local database configuration
  */
 $conf['settings']['local.db']['type'] = 'mysql';
 $conf['settings']['local.db']['user'] = 'mds';             // database user with permission to the phpScheduleIt database
@@ -35,11 +36,11 @@ $conf['settings']['local.db']['name'] = 'oscar_12_1';
 /**
  * MDS configuration
  */
-$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // database user with permission to the phpScheduleIt database
+$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com user website for the integrator
 $conf['settings']['mds']['password'] = '_paneta-!@#';
-$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';        // ip, dns or named pipe
+$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
 
-//$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                  // database user with permission to the phpScheduleIt database
+//$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                           // database user with permission to the phpScheduleIt database
 //$conf['settings']['mds']['password'] = 'oscar1';
 //$conf['settings']['mds']['base.url'] = 'http://localhost/docSchedule/Web/Services';        // ip, dns or named pipe
 
@@ -83,7 +84,7 @@ $conf['settings']['data.transfer']['provider.list'] = 'Paleta';
 $conf['settings']['phpmailer']['mailer'] = 'mail';              // options are 'mail', 'smtp' or 'sendmail'
 $conf['settings']['phpmailer']['smtp.host'] = '';               // 'smtp.company.com'
 $conf['settings']['phpmailer']['smtp.port'] = '25';
-$conf['settings']['phpmailer']['smtp.secure'] = '';             // options are '', 'ssl' or 'tls'
+$conf['settings']['phpmailer']['smtp.secure'] = 'tls';             // options are '', 'ssl' or 'tls'
 $conf['settings']['phpmailer']['smtp.auth'] = 'true';           // options are 'true' or 'false'
 $conf['settings']['phpmailer']['smtp.username'] = '';
 $conf['settings']['phpmailer']['smtp.password'] = '';
@@ -93,6 +94,6 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
 /**
  * Live Data; this is used to save the latest run-time values for the next run
  */
-$conf['settings']['dynamic.data']['last.deleted.id'] = '633';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-25 13:05:37';
+$conf['settings']['dynamic.data']['last.deleted.id'] = '636';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-26 12:57:56';
 

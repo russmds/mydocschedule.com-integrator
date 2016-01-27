@@ -272,7 +272,7 @@ abstract class BaseIntegrator implements IIntegrator
 		}
 		if (count($emails) > 0)
 		{
-			$lang = (!($this->config->GetKey(ConfigKeys::LANG_CODE))) ? 'en_us' : $this->config->GetKey(ConfigKeys::LANG_CODE);
+			$lang = (!($this->config->GetKey(ConfigKeys::LANGUAGE))) ? 'en_us' : $this->config->GetKey(ConfigKeys::LANGUAGE);
 								  
 			$message = new SyncErrorEmail($message, $errors, $lang, $emails);
 		
@@ -488,7 +488,7 @@ abstract class BaseIntegrator implements IIntegrator
 		
 		if (count($emails) > 0)
 		{
-			$lang = (!$this->config->GetKey(ConfigKeys::LANG_CODE)) ? 'en_us' : $this->config->GetKey(ConfigKeys::LANG_CODE);
+			$lang = (!$this->config->GetKey(ConfigKeys::LANGUAGE)) ? 'en_us' : $this->config->GetKey(ConfigKeys::LANGUAGE);
 								  
 			$message = new ReconciliationEmail($diff, $localOnly, $inMds, $lang, $emails);
 		
