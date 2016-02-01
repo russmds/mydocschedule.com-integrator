@@ -24,7 +24,7 @@ if (!defined('SMARTY_DIR'))
 	define('SMARTY_DIR', ROOT_DIR . 'lib/external/Smarty/');
 }
 require_once(ROOT_DIR . 'lib/external/Smarty/Smarty.class.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
+//require_once(ROOT_DIR . 'lib/Server/namespace.php');
 //require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');

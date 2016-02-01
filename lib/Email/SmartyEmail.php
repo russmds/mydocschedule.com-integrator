@@ -23,7 +23,7 @@ if (!defined('SMARTY_DIR')) {
 }
 
 require_once(ROOT_DIR . 'lib/external/Smarty/Smarty.class.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
+//require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 
 class SmartyEmail extends Smarty

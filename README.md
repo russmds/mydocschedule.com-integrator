@@ -130,6 +130,19 @@ log to see why login failed and why.
 
 #### Schedule The Integration Runs
 
+To schedule the integration runs do this open a crontab file:
+
+~~~
+crontab -e
+~~~
+
+In the crontab file enter a line like this where you can change '2' to '1' to run the integrator script every 1 minute instead of every 2 minutes.
+Replace the $INSTALLATION_DIRECTORY with your actual directory where the mdsIntegrator can be found.
+
+~~~
+*/2 * * * * cd $INSTALLATION_DIRECTORY/mdsIntegrator;php integrator.php
+~~~
+
 ## License
 
 A short snippet describing the license (MIT, Apache, etc.)

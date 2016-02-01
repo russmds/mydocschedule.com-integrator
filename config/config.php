@@ -36,7 +36,7 @@ $conf['settings']['local.db']['name'] = 'oscar_12_1';
 /**
  * MDS configuration
  */
-$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com user website for the integrator
+$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com website login for the integrator
 $conf['settings']['mds']['password'] = '_paneta-!@#';
 $conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
 
@@ -47,7 +47,7 @@ $conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';
 $conf['settings']['mds']['authenticate.url'] = '/Authentication/Authenticate';
 $conf['settings']['mds']['signout.url'] = '/Authentication/SignOut';
 $conf['settings']['mds']['appointment.url'] = '/Reservations/';
-$conf['settings']['mds']['email.list'] = 'remprofant@gmail.com';
+$conf['settings']['mds']['email.list'] = 'support@mydocschedule.com';
 $conf['settings']['mds']['phone.format'] = '999-999-9999';
 $conf['settings']['mds']['reconciliation.time'] = '07:00';   // time of the day when full reconciliation is run in HH:MM
 
@@ -95,5 +95,5 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
  * Live Data; this is used to save the latest run-time values for the next run
  */
 $conf['settings']['dynamic.data']['last.deleted.id'] = '636';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-01-26 12:57:56';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-02-01 15:01:29';
 
