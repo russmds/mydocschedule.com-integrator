@@ -40,7 +40,13 @@ sudo apt-get install php5-mysql php5-curl
 ~~~
 
 Now download the package appropriate for your machine based on its OS. The operating system's short name is part of the software package name, namely "lin" is
-for Linux and "win" is for Windows. After the download unzip the package anywhere you like and you are done with installation.
+for Linux and "win" is for Windows. After the download unzip the package anywhere you like and you are done with installation. To install in your user directory do the following.
+
+~~~
+cd ~
+mv ~/Downloads/mdsIntegrator*.tar.gz .
+tar xvzf ./mdsIntegrator*.tar.gz
+~~~
 
 ## Integrator Setup
 

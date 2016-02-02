@@ -36,13 +36,13 @@ $conf['settings']['local.db']['name'] = 'oscar_12_1';
 /**
  * MDS configuration
  */
-$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com website login for the integrator
-$conf['settings']['mds']['password'] = '_paneta-!@#';
-$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
+//$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com website login for the integrator
+//$conf['settings']['mds']['password'] = '_paneta-!@#';
+//$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
 
-//$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                           // database user with permission to the phpScheduleIt database
-//$conf['settings']['mds']['password'] = 'oscar1';
-//$conf['settings']['mds']['base.url'] = 'http://localhost/docSchedule/Web/Services';        // ip, dns or named pipe
+$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                           // database user with permission to the phpScheduleIt database
+$conf['settings']['mds']['password'] = 'oscar1';
+$conf['settings']['mds']['base.url'] = 'http://localhost/docSchedule/Web/Services';        // ip, dns or named pipe
 
 $conf['settings']['mds']['authenticate.url'] = '/Authentication/Authenticate';
 $conf['settings']['mds']['signout.url'] = '/Authentication/SignOut';
@@ -94,6 +94,6 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
 /**
  * Live Data; this is used to save the latest run-time values for the next run
  */
-$conf['settings']['dynamic.data']['last.deleted.id'] = '636';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-02-01 15:01:29';
+$conf['settings']['dynamic.data']['last.deleted.id'] = '655';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-02-02 10:53:57';
 
