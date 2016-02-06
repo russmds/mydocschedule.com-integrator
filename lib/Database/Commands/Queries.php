@@ -52,7 +52,8 @@ class Queries
 	
 	const INSERT_APPOINTMENT_IN_OSCAR = "INSERT INTO oscar_12_1.appointment(provider_no, appointment_date, start_time, end_time, name, demographic_no, program_id, notes, status, createdatetime, updatedatetime,
 										 creator, lastupdateuser, reason, location, resources, type)
-										 VALUES(@resourceId, DATE(@date), @startTime, @endTime, UPPER(@name), @patientId, 'mdsIntegrator', CONCAT('MDS:', @rn, ';'), @status, NOW(), NOW(), @creator, @userId, '', '', '', '')"; 
+										 VALUES(@resourceId, DATE(@date), @startTime, @endTime, UPPER(@name), @patientId, 'mdsIntegrator',
+										 CONCAT('MDS:', @rn, ';', @seriesId, ';'), @status, NOW(), NOW(), @creator, @userId, '', '', '', '')"; 
 	
 	const INSERT_PATIENT_IN_OSCAR = "INSERT INTO oscar_12_1.demographic(last_name, first_name, address, city, province, postal, phone, phone2, email, patient_status,
 									 patient_status_date, date_joined, official_lang, provider_no, hc_type, country_of_origin, newsletter, lastUpdateDate, lastUpdateUser,
@@ -98,6 +99,8 @@ class Queries
 	const GET_APPOINTMENT_BY_RN = "SELECT * FROM oscar_12_1.appointment WHERE notes like @notes";
 	
 	const GET_PATIENT_BY_MOBILE = "SELECT * FROM oscar_12_1.demographicExt WHERE key_val = 'demo_cell' AND value = @value";
+	
+	const GET_APPOINTMENT_BY_SID = "SELECT * FROM oscar_12_1.appointment WHERE notes LIKE CONCAT('%;', @seriesId, ';%')";
 }
 
 

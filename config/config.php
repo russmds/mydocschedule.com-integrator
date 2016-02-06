@@ -94,6 +94,6 @@ $conf['settings']['phpmailer']['send.mail.flag'] = 'true';
 /**
  * Live Data; this is used to save the latest run-time values for the next run
  */
-$conf['settings']['dynamic.data']['last.deleted.id'] = '655';
-$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-02-02 10:53:57';
+$conf['settings']['dynamic.data']['last.deleted.id'] = '670';
+$conf['settings']['dynamic.data']['last.updated.timestamp'] = '2016-02-03 14:53:15';
 

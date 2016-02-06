@@ -634,7 +634,7 @@ abstract class BaseIntegrator implements IIntegrator
         // make the call to the API
         $url = $this->mdsBaseUrl . $this->config->GetSectionKey(ConfigSection::MDS, ConfigKeys::APPOINTMENT_URL);
         
-        $url .= $refNum;
+        $url .= $refNum . '?updateScope=this';
         
 		if (array_key_exists('d', $options) || array_key_exists('debug', $options))		
 			$url .= '&XDEBUG_SESSION_START=1';

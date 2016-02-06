@@ -190,7 +190,7 @@ class OscarIntegrator extends BaseIntegrator
         // in the appointment record the user is the patient
         if ($appointment->userId == 0)
         {
-            $patientId = $this->_mapPatient($appointment->patient);
+            $patientId = $this->_mapPatient($appointment);
         }else
         {
             $patientId = $appointment->userId;
@@ -252,6 +252,7 @@ class OscarIntegrator extends BaseIntegrator
         $rn = $appointment->referenceNumber;
         $status = 't';
         $providerName = $this->myLname . ',' .  $this->myFname;
+        $seriesId = $appointment->seriesId;
         
         $returnArray = array();
         
@@ -269,7 +270,7 @@ class OscarIntegrator extends BaseIntegrator
         
         if ($appointmentId == 0)
         {
-            $appointmentId = ServiceLocator::GetDatabase()->ExecuteInsert(new InsertAppointmentInOscarCommand($resourceId, $startTime, $endTime, $name, $rn, $status, $patientId, $providerId, $providerName, $appointment->startDate));
+            $appointmentId = ServiceLocator::GetDatabase()->ExecuteInsert(new InsertAppointmentInOscarCommand($resourceId, $startTime, $endTime, $name, $rn, $status, $patientId, $providerId, $providerName, $appointment->startDate, $seriesId));
             
             $returnArray = array('patientId' => $patientId, 'appointmentId' => $appointmentId);
         }else
@@ -281,12 +282,26 @@ class OscarIntegrator extends BaseIntegrator
         return $returnArray;
     }    
     
-    private function _mapPatient($patient)
+    private function _mapPatient($appointment)
     {
         $mapFlag = $this->config->GetSectionKey(ConfigSection::DATA_TRANSFER, ConfigKeys::MAP_PATIENT);
     
         $patientId = 0;
         
+        $patient = $appointment->patient;
+        
+        // if thsis is a repeat appointment look for an existing appointment
+        if ($appointment->isRecurring)
+        {
+            $result = ServiceLocator::GetDatabase()->Query(new FindAppointmentBySeriesId($appointment->seriesId));
+            
+            if ($row = $result->GetRow())
+            {
+                $patientId = $row['demographic_no'];
+                 
+                return $patientId; 
+            }
+        }
         if (!is_null($mapFlag))
         {
             foreach (explode(',', $mapFlag) as $key)

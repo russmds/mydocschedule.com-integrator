@@ -136,18 +136,29 @@ log to see why login failed and why.
 
 #### Schedule The Integration Runs
 
-To schedule the integration runs do this open a crontab file:
+To schedule the integration runs open a crontab file first:
 
 ~~~
 crontab -e
 ~~~
 
-In the crontab file enter a line like this where you can change '2' to '1' to run the integrator script every 1 minute instead of every 2 minutes.
+In the crontab file enter a line like this where you can change '2' to '1' to run the integrator script every 1 minute instead of every 2 minutes. Obviously the lesser the delay
+the less likely chance there is of calendars being out of sync and allowing doudble booking where the medical office books an appointment and at the same time a patient books an appointment
+on MyDocSchedule.com.
+
 Replace the $INSTALLATION_DIRECTORY with your actual directory where the mdsIntegrator can be found.
 
 ~~~
 */2 * * * * cd $INSTALLATION_DIRECTORY/mdsIntegrator;php integrator.php
 ~~~
+
+It may seem that to run a process every minute on a computer may cause a heavy load on the machine and slow down other processing including Oscar itself
+if Oscar runs on the same machine. However this shouldn't be the case because the computers are a lot faster and more powerful now than they used to be.
+We measured a load on an above-average-speced laptop and we found that an empty synchronization run (no updates needed on MyDocSchedule.com or local Oscar)
+which will constitute the vast majority of runs takes about 1.7 seconds, assuming that this sync up consumes 100% of computer resources it consumes less than 3%
+of machine resoruces over each 1 minute period. 3% is not much and it's likely less than that because the run almost certainly doesn't consume 100% of computer resources. The memory
+consumption is really insignificant as its just a few kilobytes out of multi-gigabuyte memory and the same goes for band-width. All-in-all the load on the computer even when
+performing synchronization runs every minute is small.
 
 ## License
 

@@ -51,5 +51,6 @@ class ParameterNames
 	const NOTES = '@notes';
 	const LAST_ID = '@lastId';
 	const PROVIDERS = '@providers';
+	const SERIES_ID = '@seriesId';
 	
 }

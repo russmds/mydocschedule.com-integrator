@@ -136,7 +136,7 @@ class UpdatePatientNameInOscarCommand extends SqlCommand
 
 class InsertAppointmentInOscarCommand extends SqlCommand
 {
-	public function __construct($resourceId, $startTime, $endTime, $name, $rn, $status, $patientId, $providerId, $providerName, $date)
+	public function __construct($resourceId, $startTime, $endTime, $name, $rn, $status, $patientId, $providerId, $providerName, $date, $seriesId)
 	{
 		parent::__construct(Queries::INSERT_APPOINTMENT_IN_OSCAR);
 		$this->AddParameter(new Parameter(ParameterNames::RESOURCE_ID, $resourceId));
@@ -149,6 +149,7 @@ class InsertAppointmentInOscarCommand extends SqlCommand
 		$this->AddParameter(new Parameter(ParameterNames::USER_ID, $providerId));
 		$this->AddParameter(new Parameter(ParameterNames::CREATOR, $providerName));
 		$this->AddParameter(new Parameter(ParameterNames::DATE, $date));
+		$this->AddParameter(new Parameter(ParameterNames::SERIES_ID, $seriesId));
 	}	
 }
 
@@ -228,5 +229,14 @@ class FindPatientByMobileCommand extends SqlCommand
 	{
 		parent::__construct(Queries::GET_PATIENT_BY_MOBILE);
 		$this->AddParameter(new Parameter(ParameterNames::VALUE, $phone));
+	}	
+}
+
+class FindAppointmentBySeriesId extends SqlCommand
+{
+	public function __construct($seriesId)
+	{
+		parent::__construct(Queries::GET_APPOINTMENT_BY_SID);
+		$this->AddParameter(new Parameter(ParameterNames::SERIES_ID, $seriesId));
 	}	
 }
