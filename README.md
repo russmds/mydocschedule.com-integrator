@@ -50,7 +50,8 @@ tar xvzf ./mdsIntegrator*.tar.gz
 
 ## Integrator Setup
 
-The integrator package needs to be setup before it can be used. The setup depends on which local software is being integrated with MyDocSchedule.com. Folow the instructions below for you software.
+The integrator package needs to be setup before it can be used. The setup depends on which local software is being integrated with MyDocSchedule.com. Currently only Oscar is supported
+but support for other software packages will be added as it becomes available. Folow the instructions below for you software.
 
 ### Oscar
 
@@ -162,5 +163,4 @@ performing synchronization runs every minute is small.
 
 ## License
 
-A short snippet describing the license (MIT, Apache, etc.)
-
+This software is released under GPL 3 license.
