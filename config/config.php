@@ -21,7 +21,6 @@ $conf['settings']['enable.email'] = 'true';                       // global conf
 $conf['settings']['default.language'] = 'en_us';                  // find your language in phpScheduleIt/lang directory
 $conf['settings']['admin.email'] = '';
 $conf['settings']['integration.with'] = 'oscar';
-#$conf['settings']['lang.code'] = 'en_us';
 
 
 /**
@@ -36,13 +35,13 @@ $conf['settings']['local.db']['name'] = 'oscar_12_1';
 /**
  * MDS configuration
  */
-//$conf['settings']['mds']['user'] = 'mds-integrator@drpaneta.com';                  // MyDocSchedule.com website login for the integrator
-//$conf['settings']['mds']['password'] = '_paneta-!@#';
-//$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
+$conf['settings']['mds']['user'] = 'mds-integrator@drsmith.com';                  // MyDocSchedule.com website login for the integrator
+$conf['settings']['mds']['password'] = 'password';
+$conf['settings']['mds']['base.url'] = 'https://www.mydocschedule.com/Services';   // ip, dns or named pipe
 
-$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                           // database user with permission to the phpScheduleIt database
-$conf['settings']['mds']['password'] = 'oscar1';
-$conf['settings']['mds']['base.url'] = 'http://localhost/docSchedule/Web/Services';        // ip, dns or named pipe
+//$conf['settings']['mds']['user'] = 'oscar@naidoo.com';                           // database user with permission to the phpScheduleIt database
+//$conf['settings']['mds']['password'] = 'oscar1';
+//$conf['settings']['mds']['base.url'] = 'http://localhost/docSchedule/Web/Services';        // ip, dns or named pipe
 
 $conf['settings']['mds']['authenticate.url'] = '/Authentication/Authenticate';
 $conf['settings']['mds']['signout.url'] = '/Authentication/SignOut';
