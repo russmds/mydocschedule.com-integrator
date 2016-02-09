@@ -1,5 +1,6 @@
-tpl_c/*
-log/*
-reports/*
+#tpl_c/*
+#log/*
+#reports/*
 OscarIntegration.komodoproject
 .komodotools/*
+.gitignore
